@@ -1,38 +1,69 @@
+# 🗺️ Google Maps Scraper & Links Generator  
 
-# Google Maps Reviews Scraper
+A Python-based toolkit for generating Google Maps search links and collecting **user reviews and metadata** from institution pages.  
+It is designed for structured data extraction, making it suitable for research, civic tech, and large-scale institutional analysis.  
 
-A Python-based web scraper that collects user reviews from Google Maps pages of institutions and organizations. This tool extracts structured data including organization name, address, city, review content, author, rating, and date — saving everything to a JSON file for further analysis.
+---
 
-## Features
+## 📂 Project Structure  
 
-- Expands shortened Google Maps URLs (e.g., goo.gl, g.co)
-- Headless Chrome support via Selenium
-- Automatically detects and clicks the “Reviews” tab
-- Extracts:
-  - Institution Name
-  - Category (if available)
-  - Full Address
-  - City (parsed from the address)
-  - Author, Date, Rating, and Content of Reviews
-- Filters reviews written within the last 3 years
-- Handles dynamic loading via infinite scrolling
-- Saves results as `.json` in a clean and safe format with fallback logic
+- **`links-generator.py`**  
+  Generates Google Maps search links from a list of institution names or categories.  
+  Useful for preparing input files for large-scale scraping.  
 
-## Requirements
+- **`google-maps-scraper.py`**  
+  Scrapes institution data (name, address, city, reviews, etc.) from Google Maps pages using Selenium.  
 
-- Python 3.7+
-- Google Chrome installed
-- Google ChromeDriver (auto-managed)
+---
 
-### Python Packages
+## ✨ Features  
 
-Install required packages with:
+- 🔗 **Link Generation**:  
+  - Converts institution lists into Google Maps search URLs.  
+  - Ensures full, valid links for scraping.  
+
+- 🖥️ **Scraper Core**:  
+  - Supports **headless Chrome** automation via Selenium.  
+  - Expands shortened Google Maps links (e.g., `goo.gl`, `g.co`).  
+  - Automatically detects and clicks the “Reviews” tab.  
+  - Scrolls dynamically to load more reviews.  
+
+- 📍 **Metadata Extraction**:  
+  - Institution/Organization Name  
+  - Category (if available)  
+  - Full Address  
+  - City (parsed from address)  
+
+- 📝 **Review Extraction**:  
+  - Author Name  
+  - Date (normalized with `dateparser`)  
+  - Rating (1–5 stars)  
+  - Review Text  
+
+- 🕒 **Filtering**: Keeps reviews from the **last 3 years** only.  
+
+- 📂 **Output**:  
+  - Saves each institution as a `.json` file in `all_reviews/`.  
+  - Skips saving if no reviews are found.  
+  - Handles duplicate filenames by appending `_1`, `_2`, etc.  
+
+---
+
+## ⚙️ Requirements  
+
+- **Python 3.7+**  
+- **Google Chrome** installed  
+- **Google ChromeDriver** (managed by `webdriver-manager`)  
+
+### Python Packages  
+
+Install dependencies with:  
 
 ```bash
 pip install -r requirements.txt
-```
+```  
 
-**requirements.txt**
+**requirements.txt**  
 ```
 selenium
 webdriver-manager
@@ -41,35 +72,55 @@ dateparser
 requests
 ```
 
-## Usage
+---
 
-### 1. Scrape a single Google Maps link
+## 🚀 Usage  
+
+### 1. Generate Google Maps Links  
+
+From a CSV or TXT file with institution names:  
+
+```bash
+python links-generator.py --input institutions.csv --output links.txt
+```  
+
+- `--input` → CSV/TXT file with institution names or categories  
+- `--output` → File where generated Google Maps links will be saved  
+
+---
+
+### 2. Scrape Google Maps Data  
+
+Using a single URL:  
 
 ```bash
 python google-maps-scraper.py "https://www.google.com/maps/place/..." 50 true
-```
+```  
 
-### 2. Scrape multiple URLs from a file
-
-Put one URL per line in a `.txt` file (e.g., `links.txt`), then run:
+Using multiple URLs from a file:  
 
 ```bash
 python google-maps-scraper.py links.txt 50 true
-```
+```  
 
-### Parameters
+---
 
-| Argument         | Description                                            |
-|------------------|--------------------------------------------------------|
-| `<url or file>`  | Google Maps link OR path to `.txt` file with URLs     |
-| `[max_reviews]`  | Max reviews per location (default = 30)               |
-| `[headless]`     | Optional: use `"false"` to see browser window         |
+## 🔧 Scraper Parameters  
 
-## Output
+| Argument         | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| `<url or file>`  | Google Maps link **OR** path to `.txt` file containing multiple URLs        |
+| `[max_reviews]`  | Max number of reviews per location (default = `30`)                         |
+| `[headless]`     | Run headless Chrome (`true` = no UI, `false` = visible browser window)       |
 
-All JSON files are saved in the `all_reviews/` directory. Filenames are sanitized versions of the organization name.
+---
 
-Example output:
+## 📊 Output Example  
+
+All results are saved inside the `all_reviews/` directory.  
+
+Example JSON output:  
+
 ```json
 [
   {
@@ -79,21 +130,47 @@ Example output:
     "date": "2023-08-10",
     "rating": "4.0",
     "content": "Зручно, швидко, персонал ввічливий."
+  },
+  {
+    "city": "Vinnytsia",
+    "organization": "ЦНАП Вінниці",
+    "author": "Olena Koval",
+    "date": "2024-04-02",
+    "rating": "5.0",
+    "content": "Чудовий сервіс!"
   }
 ]
 ```
 
-## Notes
+---
 
-- The scraper only saves reviews with non-empty content and recent dates (≤ 3 years old).
-- The city name is heuristically extracted from the address.
-- Layout changes on Google Maps may affect selector reliability.
+## 🛠️ Troubleshooting  
 
-## Troubleshooting
+- **No reviews loaded?**  
+  - Ensure the place has a “Reviews” tab.  
+  - Check for CAPTCHA restrictions on Google Maps.  
 
-- No reviews loaded? Check if the page has a “Reviews” tab or if you’re blocked by CAPTCHA.
-- ChromeDriver issues? Ensure your installed Chrome version matches the auto-installed ChromeDriver.
+- **ChromeDriver issues?**  
+  - Ensure your Chrome version matches the auto-installed driver.  
+  - Clear cache in `~/.wdm/` if needed.  
 
-## License
+- **Empty JSON file?**  
+  - Script skips saving if no valid reviews are found.  
+  - Double-check URLs are valid Google Maps links.  
 
-MIT License. Feel free to fork, improve, and use this tool for civic tech, research, or other applications.
+---
+
+## ⚖️ Notes  
+
+- Only **non-empty, recent (≤ 3 years old)** reviews are saved.  
+- City names are parsed heuristically and may require cleaning.  
+- Google Maps layout updates can break selectors — adjust code if needed.  
+- Intended for **educational, research, and civic tech purposes only**.  
+  Respect Google’s [Terms of Service](https://policies.google.com/terms).  
+
+---
+
+## 📜 License  
+
+MIT License.  
+Free to fork, improve, and adapt for your projects.  
