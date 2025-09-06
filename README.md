@@ -1,11 +1,11 @@
-# 🗺️ Google Maps Scraper & Links Generator  
+# Google Maps Scraper & Links Generator  
 
 A Python-based toolkit for generating Google Maps search links and collecting **user reviews and metadata** from institution pages.  
 It is designed for structured data extraction, making it suitable for research, civic tech, and large-scale institutional analysis.  
 
 ---
 
-## 📂 Project Structure  
+## Project Structure  
 
 - **`links-generator.py`**  
   Generates Google Maps search links from a list of institution names or categories.  
@@ -16,40 +16,40 @@ It is designed for structured data extraction, making it suitable for research, 
 
 ---
 
-## ✨ Features  
+## Features  
 
-- 🔗 **Link Generation**:  
+- **Link Generation**:  
   - Converts institution lists into Google Maps search URLs.  
   - Ensures full, valid links for scraping.  
 
-- 🖥️ **Scraper Core**:  
+- **Scraper Core**:  
   - Supports **headless Chrome** automation via Selenium.  
   - Expands shortened Google Maps links (e.g., `goo.gl`, `g.co`).  
   - Automatically detects and clicks the “Reviews” tab.  
   - Scrolls dynamically to load more reviews.  
 
-- 📍 **Metadata Extraction**:  
+- **Metadata Extraction**:  
   - Institution/Organization Name  
   - Category (if available)  
   - Full Address  
   - City (parsed from address)  
 
-- 📝 **Review Extraction**:  
+- **Review Extraction**:  
   - Author Name  
   - Date (normalized with `dateparser`)  
   - Rating (1–5 stars)  
   - Review Text  
 
-- 🕒 **Filtering**: Keeps reviews from the **last 3 years** only.  
+- **Filtering**: Keeps reviews from the **last 3 years** only.  
 
-- 📂 **Output**:  
+- **Output**:  
   - Saves each institution as a `.json` file in `all_reviews/`.  
   - Skips saving if no reviews are found.  
   - Handles duplicate filenames by appending `_1`, `_2`, etc.  
 
 ---
 
-## ⚙️ Requirements  
+## Requirements  
 
 - **Python 3.7+**  
 - **Google Chrome** installed  
@@ -74,7 +74,7 @@ requests
 
 ---
 
-## 🚀 Usage  
+## Usage  
 
 ### 1. Generate Google Maps Links  
 
@@ -105,7 +105,7 @@ python google-maps-scraper.py links.txt 50 true
 
 ---
 
-## 🔧 Scraper Parameters  
+## Scraper Parameters  
 
 | Argument         | Description                                                                 |
 |------------------|-----------------------------------------------------------------------------|
@@ -115,7 +115,7 @@ python google-maps-scraper.py links.txt 50 true
 
 ---
 
-## 📊 Output Example  
+## Output Example  
 
 All results are saved inside the `all_reviews/` directory.  
 
@@ -144,7 +144,7 @@ Example JSON output:
 
 ---
 
-## 🛠️ Troubleshooting  
+## Troubleshooting  
 
 - **No reviews loaded?**  
   - Ensure the place has a “Reviews” tab.  
@@ -160,7 +160,7 @@ Example JSON output:
 
 ---
 
-## ⚖️ Notes  
+## Notes  
 
 - Only **non-empty, recent (≤ 3 years old)** reviews are saved.  
 - City names are parsed heuristically and may require cleaning.  
@@ -170,7 +170,7 @@ Example JSON output:
 
 ---
 
-## 📜 License  
+## License  
 
 MIT License.  
 Free to fork, improve, and adapt for your projects.  
